@@ -1,5 +1,0 @@
-databaseChangeLog:
-  - include:
-      file: db/changelog/1.0/changelog-1.0.0.yml
-  - include:
-      file: db/changelog/1.0/changelog-insert-data-1.0.1.yml
