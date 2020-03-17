@@ -31,6 +31,7 @@ public class MemberController {
         return new ResponseEntity<>(memberService.getAllMembers(), HttpStatus.OK);
     }
 
+    @ApiOperation(value = "Adding new team member")
     @PostMapping
     public ResponseEntity<String> addMember(@RequestBody MemberDto memberDto) {
         return new ResponseEntity<>(memberService.createMember(memberDto), HttpStatus.OK);
