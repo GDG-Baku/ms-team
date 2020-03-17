@@ -31,4 +31,14 @@ public class MemberController {
     public ResponseEntity deleteMember(@PathVariable("id") Integer id) {
         return new ResponseEntity(memberService.deleteMember(id), HttpStatus.OK);
     }
+
+    @PutMapping("{id}")
+    public ResponseEntity updateMember(@PathVariable Integer id, @RequestBody MemberDto memberDto) {
+        return new ResponseEntity(memberService.updateMember(id, memberDto), HttpStatus.OK);
+    }
+
+    @GetMapping("{id}")
+    public ResponseEntity getMemberById(@PathVariable Integer id) {
+        return new ResponseEntity(memberService.getMemberById(id), HttpStatus.OK);
+    }
 }

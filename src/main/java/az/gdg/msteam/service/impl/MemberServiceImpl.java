@@ -37,9 +37,11 @@ public class MemberServiceImpl implements MemberService {
     public String createMember(MemberDto memberDto) {
         isValid = true;
         String message = isMemberValid(memberDto);
-        if (isValid) {
+        if (isValid && findByEmail(memberDto.getEmail()) == null) {
             memberRepository.save(MemberMapper.INSTANCE.dtoToEntity(memberDto));
             message = "Member is created";
+        } else {
+            message = "Email already exist";
         }
         return message;
     }
@@ -72,9 +74,42 @@ public class MemberServiceImpl implements MemberService {
         return member;
     }
 
+    @Override
+    public String updateMember(Integer id, MemberDto memberDto) {
+        Member member = findById(id);
+        String message = "";
+        if (member != null) {
+            isValid = true;
+            message = isMemberValid(memberDto);
+            if (isValid) {
+                member.setFirstName(memberDto.getFirstName());
+                member.setLastName(memberDto.getLastName());
+                member.setEmail(memberDto.getEmail());
+                member.setLinkedin(memberDto.getLinkedin());
+                member.setGithub(memberDto.getGithub());
+                member.setPosition(memberDto.getPosition());
+                member.setPhoto(memberDto.getPhoto());
+                memberRepository.save(member);
+                message = "Member is updated";
+            }
+        } else {
+            message = "Member doesn't exist";
+        }
+        return message;
+    }
+
+    @Override
+    public MemberDto getMemberById(Integer id) {
+        return MemberMapper.INSTANCE.entityToDto(findById(id));
+    }
 
     private String isMemberValid(MemberDto memberDto) {
         MemberResponse response = new MemberResponse();
+        if (memberDto == null) {
+            response.setMessage("Member is null");
+            isValid = false;
+            return response.getMessage();
+        }
         if (memberDto.getFirstName() == null || memberDto.getFirstName().length() == 0) {
             response.setMessage("First name cannot be empty!");
             isValid = false;
@@ -87,11 +122,6 @@ public class MemberServiceImpl implements MemberService {
         }
         if (memberDto.getEmail() == null || memberDto.getEmail().length() == 0) {
             response.setMessage("Email cannot be empty!");
-            isValid = false;
-            return response.getMessage();
-        }
-        if (findByEmail(memberDto.getEmail()) != null) {
-            response.setMessage("Email already exist");
             isValid = false;
             return response.getMessage();
         }

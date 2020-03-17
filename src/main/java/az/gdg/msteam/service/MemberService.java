@@ -15,4 +15,8 @@ public interface MemberService {
     String deleteMember(Integer id);
 
     Member findById(Integer id);
+
+    String updateMember(Integer id, MemberDto memberDto);
+
+    MemberDto getMemberById(Integer id);
 }
