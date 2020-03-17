@@ -27,6 +27,8 @@ databaseChangeLog:
               - column:
                   name: email
                   type: varchar(35)
+                  constraints:
+                    nullable: false
               - column:
                   name: linkedin
                   type: varchar(100)

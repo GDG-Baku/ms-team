@@ -22,8 +22,13 @@ public class MemberController {
         return new ResponseEntity(memberService.getAllMembers(), HttpStatus.OK);
     }
 
-    @PostMapping("/add-member")
+    @PostMapping
     public ResponseEntity addMember(@RequestBody MemberDto memberDto) {
-        return new ResponseEntity("", HttpStatus.OK);
+        return new ResponseEntity(memberService.createMember(memberDto), HttpStatus.OK);
+    }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity deleteMember(@PathVariable("id") Integer id) {
+        return new ResponseEntity(memberService.deleteMember(id), HttpStatus.OK);
     }
 }
