@@ -1,0 +1,43 @@
+databaseChangeLog:
+  - logicalFilePath: db/changelog/1.0/changelog-1.0.0.yml
+  - changeSet:
+      id: created members table
+      author: Asif Hajiyev
+      changes:
+        - createTable:
+            tableName: members
+            columns:
+              - column:
+                  name: id
+                  type: serial
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: first_name
+                  type: varchar(30)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: last_name
+                  type: varchar(30)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: email
+                  type: varchar(35)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: linkedin
+                  type: varchar(100)
+              - column:
+                  name: github
+                  type: varchar(50)
+              - column:
+                  name: position
+                  type: varchar(15)
+              - column:
+                  name: photo
+                  type: varchar(100)
