@@ -37,17 +37,20 @@ public class MemberController {
         return new ResponseEntity<>(memberService.createMember(memberDto), HttpStatus.OK);
     }
 
-    @DeleteMapping("{id}")
+    @ApiOperation(value = "Deleting team member")
+    @DeleteMapping("internal/{id}")
     public ResponseEntity<String> deleteMember(@PathVariable("id") Integer id) {
         return new ResponseEntity<>(memberService.deleteMember(id), HttpStatus.OK);
     }
 
-    @PutMapping("{id}")
+    @ApiOperation(value = "Updating team member")
+    @PutMapping("internal/{id}")
     public ResponseEntity<String> updateMember(@PathVariable Integer id, @RequestBody MemberDto memberDto) {
         return new ResponseEntity<>(memberService.updateMember(id, memberDto), HttpStatus.OK);
     }
 
-    @GetMapping("{id}")
+    @ApiOperation(value = "Getting team member by id")
+    @GetMapping("internal/{id}")
     public ResponseEntity<MemberDto> getMemberById(@PathVariable Integer id) {
         return new ResponseEntity<>(memberService.getMemberById(id), HttpStatus.OK);
     }
