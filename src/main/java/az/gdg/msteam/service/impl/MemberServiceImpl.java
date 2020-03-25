@@ -1,5 +1,6 @@
 package az.gdg.msteam.service.impl;
 
+import az.gdg.msteam.exception.MemberNotFoundException;
 import az.gdg.msteam.mapper.MemberMapper;
 import az.gdg.msteam.model.MemberResponse;
 import az.gdg.msteam.model.dto.MemberDto;
@@ -8,13 +9,12 @@ import az.gdg.msteam.repository.MemberRepository;
 import az.gdg.msteam.service.MemberService;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class MemberServiceImpl implements MemberService {
 
-    private MemberRepository memberRepository;
+    private final MemberRepository memberRepository;
     private boolean isValid;
 
     public MemberServiceImpl(MemberRepository memberRepository) {
@@ -23,7 +23,11 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public List<MemberDto> getAllMembers() {
-        return MemberMapper.INSTANCE.entityToDtoList(memberRepository.findAll());
+        List<MemberDto> members = MemberMapper.INSTANCE.entityToDtoList(memberRepository.findAll());
+        if (members.size() == 0) {
+            throw new MemberNotFoundException("Members couldn't be fetched");
+        }
+        return members;
     }
 
     @Override
@@ -58,9 +62,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public MemberEntity findById(Integer id) {
-        //MemberEntity memberEntity = memberRepository.findById(id).orElseThrow(() -> new MemberNotFoundException("Member doesn't exist with this id"));
-        //return memberEntity;
-        return null;
+        return memberRepository.findById(id).orElseThrow(() -> new MemberNotFoundException("Member doesn't exist with this id: " + id));
     }
 
     @Override
