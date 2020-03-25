@@ -1,9 +1,9 @@
 package az.gdg.msteam.repository;
 
-import az.gdg.msteam.model.entity.Member;
-import org.springframework.data.repository.CrudRepository;
+import az.gdg.msteam.model.entity.MemberEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 
-public interface MemberRepository extends CrudRepository<Member, Integer> {
-    Member findByEmail(String email);
+public interface MemberRepository extends JpaRepository<MemberEntity, Integer> {
+    MemberEntity findByEmail(String email);
 }

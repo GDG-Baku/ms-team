@@ -1,10 +1,9 @@
 package az.gdg.msteam.service.impl;
 
-import az.gdg.msteam.exception.MemberNotFoundException;
 import az.gdg.msteam.mapper.MemberMapper;
 import az.gdg.msteam.model.MemberResponse;
 import az.gdg.msteam.model.dto.MemberDto;
-import az.gdg.msteam.model.entity.Member;
+import az.gdg.msteam.model.entity.MemberEntity;
 import az.gdg.msteam.repository.MemberRepository;
 import az.gdg.msteam.service.MemberService;
 import org.springframework.stereotype.Service;
@@ -15,7 +14,7 @@ import java.util.List;
 @Service
 public class MemberServiceImpl implements MemberService {
 
-    MemberRepository memberRepository;
+    private MemberRepository memberRepository;
     private boolean isValid;
 
     public MemberServiceImpl(MemberRepository memberRepository) {
@@ -24,13 +23,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public List<MemberDto> getAllMembers() {
-        List<Member> members = new ArrayList<>();
-
-        for (Member member : memberRepository.findAll()) {
-            members.add(member);
-        }
-
-        return MemberMapper.INSTANCE.entityToDtoList(members);
+        return MemberMapper.INSTANCE.entityToDtoList(memberRepository.findAll());
     }
 
     @Override
@@ -47,7 +40,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public Member findByEmail(String email) {
+    public MemberEntity findByEmail(String email) {
         return memberRepository.findByEmail(email);
     }
 
@@ -64,32 +57,28 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public Member findById(Integer id) {
-        Member member = null;
-        try {
-            member = memberRepository.findById(id).orElseThrow(() -> new MemberNotFoundException("Member doesn't exist with this id"));
-        } catch (MemberNotFoundException e) {
-            e.printStackTrace();
-        }
-        return member;
+    public MemberEntity findById(Integer id) {
+        //MemberEntity memberEntity = memberRepository.findById(id).orElseThrow(() -> new MemberNotFoundException("Member doesn't exist with this id"));
+        //return memberEntity;
+        return null;
     }
 
     @Override
     public String updateMember(Integer id, MemberDto memberDto) {
-        Member member = findById(id);
+        MemberEntity memberEntity = findById(id);
         String message = "";
-        if (member != null) {
+        if (memberEntity != null) {
             isValid = true;
             message = isMemberValid(memberDto);
             if (isValid) {
-                member.setFirstName(memberDto.getFirstName());
-                member.setLastName(memberDto.getLastName());
-                member.setEmail(memberDto.getEmail());
-                member.setLinkedin(memberDto.getLinkedin());
-                member.setGithub(memberDto.getGithub());
-                member.setPosition(memberDto.getPosition());
-                member.setPhoto(memberDto.getPhoto());
-                memberRepository.save(member);
+                memberEntity.setFirstName(memberDto.getFirstName());
+                memberEntity.setLastName(memberDto.getLastName());
+                memberEntity.setEmail(memberDto.getEmail());
+                memberEntity.setLinkedin(memberDto.getLinkedin());
+                memberEntity.setGithub(memberDto.getGithub());
+                memberEntity.setPosition(memberDto.getPosition());
+                memberEntity.setPhoto(memberDto.getPhoto());
+                memberRepository.save(memberEntity);
                 message = "Member is updated";
             }
         } else {

@@ -1,7 +1,7 @@
 package az.gdg.msteam.service;
 
 import az.gdg.msteam.model.dto.MemberDto;
-import az.gdg.msteam.model.entity.Member;
+import az.gdg.msteam.model.entity.MemberEntity;
 
 import java.util.List;
 
@@ -10,11 +10,11 @@ public interface MemberService {
 
     String createMember(MemberDto memberDto);
 
-    Member findByEmail(String email);
+    MemberEntity findByEmail(String email);
 
     String deleteMember(Integer id);
 
-    Member findById(Integer id);
+    MemberEntity findById(Integer id);
 
     String updateMember(Integer id, MemberDto memberDto);
 

@@ -1,6 +1,7 @@
 package az.gdg.msteam.controller;
 
 import az.gdg.msteam.model.dto.MemberDto;
+import az.gdg.msteam.service.MemberService;
 import az.gdg.msteam.service.impl.MemberServiceImpl;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.http.HttpStatus;
@@ -17,11 +18,11 @@ import org.springframework.web.bind.annotation.PutMapping;
 import java.util.List;
 
 @RestController
-@RequestMapping("members")
-public class MemberController {
-    private MemberServiceImpl memberService;
+@RequestMapping("/members")
+public class TeamController {
+    private MemberService memberService;
 
-    public MemberController(MemberServiceImpl memberService) {
+    public TeamController(MemberServiceImpl memberService) {
         this.memberService = memberService;
     }
 
@@ -32,7 +33,7 @@ public class MemberController {
     }
 
     @ApiOperation(value = "Adding new team member")
-    @PostMapping
+    @PostMapping("internal")
     public ResponseEntity<String> addMember(@RequestBody MemberDto memberDto) {
         return new ResponseEntity<>(memberService.createMember(memberDto), HttpStatus.OK);
     }

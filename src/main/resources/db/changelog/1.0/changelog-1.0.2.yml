@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - logicalFilePath: db/changelog/1.0/changelog-1.0.2.yml
+  - changeSet:
+      id: delete-member
+      author: Asif Hajiyev
+      changes:
+        - delete:
+            tableName: members
+            where: id="7"
