@@ -4,16 +4,20 @@ import az.gdg.msteam.model.dto.MemberDto;
 import az.gdg.msteam.service.MemberService;
 import az.gdg.msteam.service.impl.MemberServiceImpl;
 import io.swagger.annotations.ApiOperation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
 @RequestMapping("/members")
 public class MemberController {
     private final MemberService memberService;
+    private static final Logger LOGGER = LoggerFactory.getLogger(MemberController.class);
 
     public MemberController(MemberServiceImpl memberService) {
         this.memberService = memberService;
@@ -22,30 +26,47 @@ public class MemberController {
     @ApiOperation(value = "Getting all team members", response = MemberDto.class)
     @GetMapping
     public ResponseEntity<List<MemberDto>> getAllMembers() {
+        LOGGER.debug("Get all team members start");
         return new ResponseEntity<>(memberService.getAllMembers(), HttpStatus.OK);
     }
 
     @ApiOperation(value = "Adding new team member")
     @PostMapping("internal")
-    public ResponseEntity<String> addMember(@RequestBody MemberDto memberDto) {
+    public ResponseEntity<String> addMember(@RequestBody @Valid MemberDto memberDto) {
+        LOGGER.debug("Add new team member start");
         return new ResponseEntity<>(memberService.createMember(memberDto), HttpStatus.OK);
     }
 
     @ApiOperation(value = "Deleting team member")
     @DeleteMapping("internal/{id}")
     public ResponseEntity<String> deleteMember(@PathVariable("id") Integer id) {
+        LOGGER.debug("Get team member by id {} start", id);
         return new ResponseEntity<>(memberService.deleteMember(id), HttpStatus.OK);
     }
 
     @ApiOperation(value = "Updating team member")
     @PutMapping("internal/{id}")
-    public ResponseEntity<String> updateMember(@PathVariable Integer id, @RequestBody MemberDto memberDto) {
+    public ResponseEntity<String> updateMember(@PathVariable Integer id, @RequestBody @Valid MemberDto memberDto) {
+        LOGGER.debug("Update team member by id {} start", id);
         return new ResponseEntity<>(memberService.updateMember(id, memberDto), HttpStatus.OK);
     }
 
     @ApiOperation(value = "Getting team member by id")
     @GetMapping("internal/{id}")
     public ResponseEntity<MemberDto> getMemberById(@PathVariable Integer id) {
+        LOGGER.debug("Update team member by id {} start", id);
         return new ResponseEntity<>(memberService.getMemberById(id), HttpStatus.OK);
     }
+
+    /*@ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public Map<String, String> handleValidationExceptions(MethodArgumentNotValidException ex) {
+        Map<String, String> errors = new HashMap<>();
+        ex.getBindingResult().getAllErrors().forEach((error) -> {
+            String fieldName = ((FieldError) error).getField();
+            String errorMessage = error.getDefaultMessage();
+            errors.put(fieldName, errorMessage);
+        });
+        return errors;
+    }*/
 }
