@@ -94,9 +94,11 @@ public class MemberServiceImpl implements MemberService {
         memberEntity.setPhoto(memberDto.getPhoto());
 
         memberRepository.save(memberEntity);
+
         LOGGER.info("ActionLog.updateMember.success with id {}", id);
         message = "Member is updated";
         LOGGER.info("ActionLog.updateMember.end with id {}", id);
+
         return message;
     }
 
