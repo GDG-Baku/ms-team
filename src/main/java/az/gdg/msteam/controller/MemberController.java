@@ -2,7 +2,6 @@ package az.gdg.msteam.controller;
 
 import az.gdg.msteam.model.dto.MemberDto;
 import az.gdg.msteam.service.MemberService;
-import az.gdg.msteam.service.impl.MemberServiceImpl;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +18,7 @@ public class MemberController {
     private final MemberService memberService;
     private static final Logger LOGGER = LoggerFactory.getLogger(MemberController.class);
 
-    public MemberController(MemberServiceImpl memberService) {
+    public MemberController(MemberService memberService) {
         this.memberService = memberService;
     }
 
