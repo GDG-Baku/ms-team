@@ -13,11 +13,9 @@ public interface MemberService {
 
     Optional<MemberEntity> findByEmail(String email);
 
-    String deleteMember(Integer id);
+    String deleteMember(Long id);
 
-    Optional<MemberEntity> findById(Integer id);
+    String updateMember(Long id, MemberDto memberDto);
 
-    String updateMember(Integer id, MemberDto memberDto);
-
-    MemberDto getMemberById(Integer id);
+    MemberDto getMemberById(Long id);
 }

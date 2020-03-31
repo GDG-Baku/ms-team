@@ -20,7 +20,7 @@ import java.util.Map;
 @RequestMapping("/members")
 public class MemberController {
     private final MemberService memberService;
-    private static final Logger LOGGER = LoggerFactory.getLogger(MemberController.class);
+    private static final Logger logger = LoggerFactory.getLogger(MemberController.class);
 
     public MemberController(MemberService memberService) {
         this.memberService = memberService;
@@ -29,35 +29,35 @@ public class MemberController {
     @ApiOperation(value = "Getting all team members", response = MemberDto.class)
     @GetMapping
     public ResponseEntity<List<MemberDto>> getAllMembers() {
-        LOGGER.debug("Get all team members start");
+        logger.debug("Get all team members start");
         return new ResponseEntity<>(memberService.getAllMembers(), HttpStatus.OK);
     }
 
     @ApiOperation(value = "Adding new team member")
     @PostMapping("internal")
     public ResponseEntity<String> addMember(@RequestBody @Valid MemberDto memberDto) {
-        LOGGER.debug("Add new team member start");
+        logger.debug("Add new team member start");
         return new ResponseEntity<>(memberService.createMember(memberDto), HttpStatus.OK);
     }
 
     @ApiOperation(value = "Deleting team member")
     @DeleteMapping("internal/{id}")
-    public ResponseEntity<String> deleteMember(@PathVariable("id") Integer id) {
-        LOGGER.debug("Get team member by id {} start", id);
+    public ResponseEntity<String> deleteMember(@PathVariable("id") Long id) {
+        logger.debug("Get team member by id {} start", id);
         return new ResponseEntity<>(memberService.deleteMember(id), HttpStatus.OK);
     }
 
     @ApiOperation(value = "Updating team member")
     @PutMapping("internal/{id}")
-    public ResponseEntity<String> updateMember(@PathVariable Integer id, @RequestBody @Valid MemberDto memberDto) {
-        LOGGER.debug("Update team member by id {} start", id);
+    public ResponseEntity<String> updateMember(@PathVariable Long id, @RequestBody @Valid MemberDto memberDto) {
+        logger.debug("Update team member by id {} start", id);
         return new ResponseEntity<>(memberService.updateMember(id, memberDto), HttpStatus.OK);
     }
 
     @ApiOperation(value = "Getting team member by id")
     @GetMapping("internal/{id}")
-    public ResponseEntity<MemberDto> getMemberById(@PathVariable Integer id) {
-        LOGGER.debug("Update team member by id {} start", id);
+    public ResponseEntity<MemberDto> getMemberById(@PathVariable Long id) {
+        logger.debug("Update team member by id {} start", id);
         return new ResponseEntity<>(memberService.getMemberById(id), HttpStatus.OK);
     }
 

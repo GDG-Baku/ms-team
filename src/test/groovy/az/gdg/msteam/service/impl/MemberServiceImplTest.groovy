@@ -1,6 +1,6 @@
 package az.gdg.msteam.service.impl
 
-import az.gdg.msteam.exception.MemberAlreadyExistException
+import az.gdg.msteam.exception.MemberExistException
 import az.gdg.msteam.exception.MemberNotFoundException
 import az.gdg.msteam.mapper.MemberMapper
 import az.gdg.msteam.model.dto.MemberDto
@@ -64,13 +64,13 @@ class MemberServiceImplTest extends Specification {
             memberDto.setPosition("back-end")
             memberDto.setPhoto("photoUrlAsif")
 
-            def empty = Optional.empty();
+            def empty = Optional.empty()
             memberRepository.findByEmail(memberDto.getEmail()) >> empty
         when:
             memberService.createMember(memberDto)
         then:
             1 * memberRepository.save(MemberMapper.INSTANCE.dtoToEntity(memberDto))
-            notThrown(MemberAlreadyExistException)
+            notThrown(MemberExistException)
     }
 
     def "should throw MemberExistException when trying to create new member with used email"() {
@@ -83,7 +83,7 @@ class MemberServiceImplTest extends Specification {
         when:
             memberService.createMember(memberDto)
         then:
-            thrown(MemberAlreadyExistException)
+            thrown(MemberExistException)
     }
 
     def "should call findByEmail on repository object"() {
@@ -156,17 +156,6 @@ class MemberServiceImplTest extends Specification {
             memberService.updateMember(memberEntity.getId(), memberDto)
         then:
             thrown(MemberNotFoundException)
-    }
-
-    def "should return member with given id"() {
-        given:
-            def member = new MemberEntity()
-            memberRepository.findById(member.getId()) >> Optional.of(member)
-        when:
-            memberService.findById(member.getId())
-        then:
-            1 * memberRepository.findById(member.getId())
-            notThrown(MemberNotFoundException)
     }
 
     def cleanup() {

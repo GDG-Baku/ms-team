@@ -4,6 +4,7 @@ plugins {
     id 'java'
 }
 apply plugin: "groovy"
+apply plugin: 'checkstyle'
 
 group = 'az.gdg'
 version = '0.0.1-SNAPSHOT'
@@ -25,6 +26,10 @@ repositories {
 
 ext {
     set('springCloudVersion', "Hoxton.SR3")
+}
+
+checkstyle {
+    toolVersion '8.14'
 }
 
 dependencies {

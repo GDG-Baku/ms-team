@@ -8,9 +8,6 @@ databaseChangeLog:
             tableName: members
             columns:
               - column:
-                  name: id
-                  value: "1"
-              - column:
                   name: first_name
                   value: "Nigar"
               - column:
@@ -34,9 +31,6 @@ databaseChangeLog:
         - insert:
             tableName: members
             columns:
-              - column:
-                  name: id
-                  value: "2"
               - column:
                   name: first_name
                   value: "Asif"
@@ -62,9 +56,6 @@ databaseChangeLog:
             tableName: members
             columns:
               - column:
-                  name: id
-                  value: "3"
-              - column:
                   name: first_name
                   value: "Minaya"
               - column:
@@ -88,9 +79,6 @@ databaseChangeLog:
         - insert:
             tableName: members
             columns:
-              - column:
-                  name: id
-                  value: "4"
               - column:
                   name: first_name
                   value: "Mahammad"
@@ -116,9 +104,6 @@ databaseChangeLog:
             tableName: members
             columns:
               - column:
-                  name: id
-                  value: "5"
-              - column:
                   name: first_name
                   value: "Laman"
               - column:
@@ -142,9 +127,6 @@ databaseChangeLog:
         - insert:
             tableName: members
             columns:
-              - column:
-                  name: id
-                  value: "6"
               - column:
                   name: first_name
                   value: "Murad"
@@ -170,9 +152,6 @@ databaseChangeLog:
             tableName: members
             columns:
               - column:
-                  name: id
-                  value: "7"
-              - column:
                   name: first_name
                   value: "Tural"
               - column:
@@ -196,9 +175,6 @@ databaseChangeLog:
         - insert:
             tableName: members
             columns:
-              - column:
-                  name: id
-                  value: "8"
               - column:
                   name: first_name
                   value: "Ali"
