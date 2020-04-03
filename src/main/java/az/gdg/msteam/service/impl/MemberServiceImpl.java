@@ -3,8 +3,9 @@ package az.gdg.msteam.service.impl;
 import az.gdg.msteam.exception.MemberExistException;
 import az.gdg.msteam.exception.MemberNotFoundException;
 import az.gdg.msteam.mapper.MemberMapper;
-import az.gdg.msteam.model.MemberResponse;
+import az.gdg.msteam.model.ResponseMessage;
 import az.gdg.msteam.model.dto.MemberDto;
+import az.gdg.msteam.model.dto.MemberResponseDto;
 import az.gdg.msteam.model.entity.MemberEntity;
 import az.gdg.msteam.repository.MemberRepository;
 import az.gdg.msteam.service.MemberService;
@@ -12,6 +13,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.io.RandomAccessFile;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,14 +30,14 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public List<MemberDto> getAllMembers() {
+    public List<MemberResponseDto> getAllMembers() {
         logger.info("ActionLog.getAllMembers.start");
         List<MemberDto> members = MemberMapper.INSTANCE.entityToDtoList(memberRepository.findAll());
         if (members.isEmpty()) {
             throw new MemberNotFoundException("No member is available");
         }
         logger.info("ActionLog.getAllMembers.success");
-        return members;
+        return dtoToResponseDto(members);
     }
 
     @Override
@@ -60,7 +64,7 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public String deleteMember(Long id) {
         logger.info("ActionLog.deleteMember.start with id {}", id);
-        MemberResponse response = new MemberResponse();
+        ResponseMessage response = new ResponseMessage();
         if (memberRepository.findById(id).isPresent()) {
             memberRepository.deleteById(id);
             logger.info("ActionLog.deleteMember.success with id {}", id);
@@ -101,5 +105,35 @@ public class MemberServiceImpl implements MemberService {
         logger.info("ActionLog.getMemberById.start with id {}", id);
         return MemberMapper.INSTANCE.entityToDto(memberRepository.findById(id)
                 .orElseThrow(() -> new MemberNotFoundException("Member doesn't exist with this id: " + id)));
+    }
+
+    public List<MemberResponseDto> dtoToResponseDto(List<MemberDto> dtoList) {
+        List<MemberResponseDto> responseDtoList = new ArrayList<>();
+        for (MemberDto memberDto : dtoList) {
+            MemberResponseDto responseDto = new MemberResponseDto();
+
+            responseDto.setFirstName(memberDto.getFirstName());
+            responseDto.setLastName(memberDto.getLastName());
+            responseDto.setEmail(memberDto.getEmail());
+            responseDto.setGithub(memberDto.getGithub());
+            responseDto.setLinkedin(memberDto.getLinkedin());
+            responseDto.setPosition(memberDto.getPosition());
+            responseDto.setPhoto(getPhotoByUrl(memberDto.getPhoto()));
+
+            responseDtoList.add(responseDto);
+        }
+        return responseDtoList;
+    }
+
+    private byte[] getPhotoByUrl(String photoUrl) {
+        photoUrl = "C:\\Users\\Magnit\\Pictures\\My Photos\\IMG-20190327-WA0043.jpg";
+        byte[] b = null;
+        try (RandomAccessFile f = new RandomAccessFile(photoUrl, "r");) {
+            b = new byte[(int) f.length()];
+            f.readFully(b);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return b;
     }
 }
