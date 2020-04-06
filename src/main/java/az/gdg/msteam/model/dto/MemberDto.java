@@ -2,11 +2,10 @@ package az.gdg.msteam.model.dto;
 
 //import az.gdg.msteam.validation.MemberConstraint;
 
+import javax.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import javax.validation.constraints.NotBlank;
 
 @Data
 @AllArgsConstructor

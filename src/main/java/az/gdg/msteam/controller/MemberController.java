@@ -4,6 +4,10 @@ import az.gdg.msteam.model.dto.MemberDto;
 import az.gdg.msteam.model.dto.MemberResponseDto;
 import az.gdg.msteam.service.MemberService;
 import io.swagger.annotations.ApiOperation;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -22,16 +26,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 @RestController
 @RequestMapping("/members")
 public class MemberController {
-    private final MemberService memberService;
     private static final Logger logger = LoggerFactory.getLogger(MemberController.class);
+    private final MemberService memberService;
 
     public MemberController(MemberService memberService) {
         this.memberService = memberService;

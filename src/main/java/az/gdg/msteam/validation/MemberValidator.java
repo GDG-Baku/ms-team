@@ -2,10 +2,9 @@ package az.gdg.msteam.validation;
 
 import az.gdg.msteam.model.dto.MemberDto;
 import az.gdg.msteam.util.CheckViolationHelper;
-import org.springframework.stereotype.Component;
-
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
+import org.springframework.stereotype.Component;
 
 @Component
 public class MemberValidator implements ConstraintValidator<MemberConstraint, MemberDto> {

@@ -2,11 +2,10 @@ package az.gdg.msteam.mapper;
 
 import az.gdg.msteam.model.dto.MemberDto;
 import az.gdg.msteam.model.entity.MemberEntity;
+import java.util.List;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
-
-import java.util.List;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface MemberMapper {

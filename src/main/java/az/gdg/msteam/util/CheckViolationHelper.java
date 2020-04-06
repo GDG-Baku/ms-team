@@ -1,8 +1,7 @@
 package az.gdg.msteam.util;
 
-import org.springframework.stereotype.Component;
-
 import javax.validation.ConstraintValidatorContext;
+import org.springframework.stereotype.Component;
 
 @Component
 public class CheckViolationHelper {
