@@ -9,11 +9,11 @@ import az.gdg.msteam.model.dto.MemberResponseDto;
 import az.gdg.msteam.model.entity.MemberEntity;
 import az.gdg.msteam.repository.MemberRepository;
 import az.gdg.msteam.service.MemberService;
-import java.io.IOException;
-import java.io.RandomAccessFile;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -125,14 +125,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     private byte[] getPhotoByUrl(String photoUrl) {
-        photoUrl = "C:\\Users\\Magnit\\Pictures\\My Photos\\IMG-20190327-WA0043.jpg";
         byte[] b = null;
-        try (RandomAccessFile f = new RandomAccessFile(photoUrl, "r");) {
-            b = new byte[(int) f.length()];
-            f.readFully(b);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         return b;
     }
 }

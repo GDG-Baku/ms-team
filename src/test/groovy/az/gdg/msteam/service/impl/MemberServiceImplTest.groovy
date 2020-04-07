@@ -22,140 +22,140 @@ class MemberServiceImplTest extends Specification {
 
     def "should return all team members"() {
         given:
-        def memberDto1 = new MemberDto()
-        memberDto1.setFirstName("Asif")
-        memberDto1.setLastName("Hajiyev")
-        memberDto1.setEmail("asif.hajiyev@outlook.com")
-        memberDto1.setGithub("githubAccountAsif")
-        memberDto1.setLinkedin("linkedinAccountAsif")
-        memberDto1.setPosition("back-end")
-        memberDto1.setPhoto("photoUrlAsif")
+            def memberDto1 = new MemberDto()
+            memberDto1.setFirstName("Asif")
+            memberDto1.setLastName("Hajiyev")
+            memberDto1.setEmail("asif.hajiyev@outlook.com")
+            memberDto1.setGithub("githubAccountAsif")
+            memberDto1.setLinkedin("linkedinAccountAsif")
+            memberDto1.setPosition("back-end")
+            memberDto1.setPhoto("photoUrlAsif")
 
-        def mockMembers = []
-        mockMembers << MemberMapper.INSTANCE.dtoToEntity(memberDto1)
-        memberRepository.findAll() >> mockMembers
+            def mockMembers = []
+            mockMembers << MemberMapper.INSTANCE.dtoToEntity(memberDto1)
+            memberRepository.findAll() >> mockMembers
         when:
-        def members = memberService.getAllMembers()
+            def members = memberService.getAllMembers()
         then:
-        memberRepository.findAll()
-        members.size() == 1
-        notThrown(MemberNotFoundException)
+            memberRepository.findAll()
+            members.size() == 1
+            notThrown(MemberNotFoundException)
     }
 
     def "should throw MemberNotFoundException if there is no any member"() {
         given:
-        def mockMembers = []
-        memberRepository.findAll() >> mockMembers
+            def mockMembers = []
+            memberRepository.findAll() >> mockMembers
         when:
-        def members = memberService.getAllMembers()
+            def members = memberService.getAllMembers()
         then:
-        members == null
-        thrown(MemberNotFoundException)
+            members == null
+            thrown(MemberNotFoundException)
     }
 
     def "should create new team member if email is unique"() {
         given:
-        def memberDto = new MemberDto()
-        memberDto.setFirstName("Asif")
-        memberDto.setLastName("Hajiyev")
-        memberDto.setEmail("asif.hajiyev@outlook.com")
-        memberDto.setGithub("githubAccountAsif")
-        memberDto.setLinkedin("linkedinAccountAsif")
-        memberDto.setPosition("back-end")
-        memberDto.setPhoto("photoUrlAsif")
+            def memberDto = new MemberDto()
+            memberDto.setFirstName("Asif")
+            memberDto.setLastName("Hajiyev")
+            memberDto.setEmail("asif.hajiyev@outlook.com")
+            memberDto.setGithub("githubAccountAsif")
+            memberDto.setLinkedin("linkedinAccountAsif")
+            memberDto.setPosition("back-end")
+            memberDto.setPhoto("photoUrlAsif")
 
-        def empty = Optional.empty()
-        memberRepository.findByEmail(memberDto.getEmail()) >> empty
+            def empty = Optional.empty()
+            memberRepository.findByEmail(memberDto.getEmail()) >> empty
         when:
-        memberService.createMember(memberDto)
+            memberService.createMember(memberDto)
         then:
-        1 * memberRepository.save(MemberMapper.INSTANCE.dtoToEntity(memberDto))
-        notThrown(MemberExistException)
+            1 * memberRepository.save(MemberMapper.INSTANCE.dtoToEntity(memberDto))
+            notThrown(MemberExistException)
     }
 
     def "should throw MemberExistException when trying to create new member with used email"() {
         given:
-        def memberDto = new MemberDto()
-        memberDto.setEmail("asif.hajiyev@outlook.com")
+            def memberDto = new MemberDto()
+            memberDto.setEmail("asif.hajiyev@outlook.com")
 
-        def entity = Optional.of(memberDto)
-        1 * memberRepository.findByEmail(memberDto.getEmail()) >> entity
+            def entity = Optional.of(memberDto)
+            1 * memberRepository.findByEmail(memberDto.getEmail()) >> entity
         when:
-        memberService.createMember(memberDto)
+            memberService.createMember(memberDto)
         then:
-        thrown(MemberExistException)
+            thrown(MemberExistException)
     }
 
     def "should call findByEmail on repository object"() {
         when:
-        memberService.findByEmail("")
+            memberService.findByEmail("")
         then:
-        1 * memberRepository.findByEmail("")
+            1 * memberRepository.findByEmail("")
     }
 
     def "should delete member if exist"() {
         given:
-        def member = new MemberEntity()
-        member.setId(1)
-        def entity = Optional.of(member)
-        memberRepository.findById(member.getId()) >> entity
+            def member = new MemberEntity()
+            member.setId(1)
+            def entity = Optional.of(member)
+            memberRepository.findById(member.getId()) >> entity
         when:
-        memberService.deleteMember(member.getId())
+            memberService.deleteMember(member.getId())
         then:
-        1 * memberRepository.deleteById(member.getId())
+            1 * memberRepository.deleteById(member.getId())
     }
 
     def "should throw exception when trying to delete member with non-existing id"() {
         given:
-        def member = new MemberEntity()
-        member.setId(1)
-        def empty = Optional.empty()
-        memberRepository.findById(member.getId()) >> empty
+            def member = new MemberEntity()
+            member.setId(1)
+            def empty = Optional.empty()
+            memberRepository.findById(member.getId()) >> empty
         when:
-        memberService.deleteMember(member.getId())
+            memberService.deleteMember(member.getId())
         then:
-        thrown(MemberNotFoundException)
+            thrown(MemberNotFoundException)
     }
 
     def "should update member when it is available"() {
         given:
-        def memberDto = new MemberDto()
-        memberDto.setFirstName("Asif")
-        memberDto.setLastName("Hajiyev")
-        memberDto.setEmail("asif.hajiyev@outlook.com")
-        memberDto.setGithub("githubAccountAsif")
-        memberDto.setLinkedin("linkedinAccountAsif")
-        memberDto.setPosition("back-end")
-        memberDto.setPhoto("photoUrlAsif")
-        def memberEntity = MemberMapper.INSTANCE.dtoToEntity(memberDto)
-        memberEntity.setId(1)
-        def entity = Optional.of(memberEntity)
-        memberRepository.findById(memberEntity.getId()) >> entity
+            def memberDto = new MemberDto()
+            memberDto.setFirstName("Asif")
+            memberDto.setLastName("Hajiyev")
+            memberDto.setEmail("asif.hajiyev@outlook.com")
+            memberDto.setGithub("githubAccountAsif")
+            memberDto.setLinkedin("linkedinAccountAsif")
+            memberDto.setPosition("back-end")
+            memberDto.setPhoto("photoUrlAsif")
+            def memberEntity = MemberMapper.INSTANCE.dtoToEntity(memberDto)
+            memberEntity.setId(1)
+            def entity = Optional.of(memberEntity)
+            memberRepository.findById(memberEntity.getId()) >> entity
         when:
-        memberService.updateMember(memberEntity.getId(), memberDto)
+            memberService.updateMember(memberEntity.getId(), memberDto)
         then:
-        1 * memberRepository.save(memberEntity)
-        notThrown(MemberNotFoundException)
+            1 * memberRepository.save(memberEntity)
+            notThrown(MemberNotFoundException)
     }
 
     def "should throw MemberNotFoundException when member isn't available while updating"() {
         given:
-        def memberDto = new MemberDto()
-        memberDto.setFirstName("Asif")
-        memberDto.setLastName("Hajiyev")
-        memberDto.setEmail("asif.hajiyev@outlook.com")
-        memberDto.setGithub("githubAccountAsif")
-        memberDto.setLinkedin("linkedinAccountAsif")
-        memberDto.setPosition("back-end")
-        memberDto.setPhoto("photoUrlAsif")
-        def memberEntity = MemberMapper.INSTANCE.dtoToEntity(memberDto)
-        memberEntity.setId(1)
-        def empty = Optional.empty()
-        memberRepository.findById(memberEntity.getId()) >> empty
+            def memberDto = new MemberDto()
+            memberDto.setFirstName("Asif")
+            memberDto.setLastName("Hajiyev")
+            memberDto.setEmail("asif.hajiyev@outlook.com")
+            memberDto.setGithub("githubAccountAsif")
+            memberDto.setLinkedin("linkedinAccountAsif")
+            memberDto.setPosition("back-end")
+            memberDto.setPhoto("photoUrlAsif")
+            def memberEntity = MemberMapper.INSTANCE.dtoToEntity(memberDto)
+            memberEntity.setId(1)
+            def empty = Optional.empty()
+            memberRepository.findById(memberEntity.getId()) >> empty
         when:
-        memberService.updateMember(memberEntity.getId(), memberDto)
+            memberService.updateMember(memberEntity.getId(), memberDto)
         then:
-        thrown(MemberNotFoundException)
+            thrown(MemberNotFoundException)
     }
 
     def cleanup() {
