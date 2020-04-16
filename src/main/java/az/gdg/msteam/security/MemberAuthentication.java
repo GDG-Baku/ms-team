@@ -38,7 +38,7 @@ public class MemberAuthentication implements Authentication {
 
     @Override
     public String getPrincipal() {
-        return role;
+        return getRole();
     }
 
     @Override
