@@ -1,12 +1,12 @@
 package az.gdg.msteam.client;
 
-import static az.gdg.msteam.model.client.auth.HttpHeader.X_AUTH_TOKEN;
-
 import az.gdg.msteam.model.client.auth.UserInfo;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
+
+import static az.gdg.msteam.model.client.auth.HttpHeader.X_AUTH_TOKEN;
 
 @FeignClient(value = "ms-auth-client", url = "https://gdg-ms-auth.herokuapp.com/")
 public interface AuthenticationClient {

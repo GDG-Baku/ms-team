@@ -1,7 +1,5 @@
 package az.gdg.msteam.filter;
 
-import static az.gdg.msteam.model.client.auth.HttpHeader.X_AUTH_TOKEN;
-
 import az.gdg.msteam.client.AuthenticationClient;
 import az.gdg.msteam.model.client.auth.UserInfo;
 import az.gdg.msteam.security.MemberAuthentication;
@@ -18,6 +16,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import static az.gdg.msteam.model.client.auth.HttpHeader.X_AUTH_TOKEN;
+
 @Component
 public class AuthenticationTokenFilter extends OncePerRequestFilter {
     private AuthenticationClient authenticationClient;
@@ -28,7 +28,8 @@ public class AuthenticationTokenFilter extends OncePerRequestFilter {
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
+                                    FilterChain filterChain) throws ServletException, IOException {
         try {
             String authToken = request.getHeader(X_AUTH_TOKEN);
             if (authToken != null) {
@@ -36,7 +37,8 @@ public class AuthenticationTokenFilter extends OncePerRequestFilter {
                 if (userInfo == null) {
                     throw new RuntimeException("User info is not valid");
                 } else {
-                    MemberAuthentication memberAuthentication = new MemberAuthentication(userInfo.getRole(), true);
+                    MemberAuthentication memberAuthentication = new MemberAuthentication(userInfo.getRole(),
+                            true);
                     SecurityContextHolder.getContext().setAuthentication(memberAuthentication);
                 }
             }
