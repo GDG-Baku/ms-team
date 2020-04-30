@@ -1,0 +1,30 @@
+databaseChangeLog:
+  - logicalFilePath: db/changelog/1.0/changelog-1.0.5.yml
+  - changeSet:
+      id: insert to members
+      author: Asif Hajiyev
+      changes:
+        - insert:
+            tableName: members
+            columns:
+              - column:
+                  name: first_name
+                  value: "Hatam"
+              - column:
+                  name: last_name
+                  value: "Jafarov"
+              - column:
+                  name: email
+                  value: "hatam.jafarov@gmail.com"
+              - column:
+                  name: linkedin
+                  value: "https://www.linkedin.com/in/hatəm-cəfərov-9ba528194/"
+              - column:
+                  name: github
+                  value: "https://github.com/Hatam-Jafarov"
+              - column:
+                  name: position
+                  value: "Front-end"
+              - column:
+                  name: photo
+                  value: "photo/hatam"
