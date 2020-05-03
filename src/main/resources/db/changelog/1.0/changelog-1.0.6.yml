@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - logicalFilePath: db/changelog/1.0/changelog-1.0.6.yml
+  - changeSet:
+      id: update-member
+      author: Asif Hajiyev
+      changes:
+        - update:
+            tableName: members
+            where: first_name="Hatam"
+            columns:
+              - column:
+                  name: linkedin
+                  value: "www.linkedin.com/in/hatam-jafarov"
