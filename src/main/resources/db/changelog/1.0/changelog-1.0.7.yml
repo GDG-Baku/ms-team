@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - logicalFilePath: db/changelog/1.0/changelog-1.0.7.yml
+  - changeSet:
+      id: update-member
+      author: Asif Hajiyev
+      changes:
+        - update:
+            tableName: members
+            where: first_name="Mahammad"
+            columns:
+              - column:
+                  name: email
+                  value: "rahimov.mahammad.s@gmail.com"
