@@ -66,7 +66,9 @@ public class MemberServiceImpl implements MemberService {
         String message;
         if (role.equals(ROLE_ADMIN)) {
             if (!findByEmail(memberDto.getEmail()).isPresent()) {
-                memberRepository.save(MemberMapper.INSTANCE.dtoToEntity(memberDto));
+                MemberEntity memberEntity = MemberMapper.INSTANCE.dtoToEntity(memberDto);
+                memberEntity.setPhoto(memberDto.getFirstName().toLowerCase());
+                memberRepository.save(memberEntity);
                 logger.info("ActionLog.createMember.success");
                 message = "Member is created";
             } else {
@@ -121,7 +123,7 @@ public class MemberServiceImpl implements MemberService {
             memberEntity.setLinkedin(memberDto.getLinkedin());
             memberEntity.setGithub(memberDto.getGithub());
             memberEntity.setPosition(memberDto.getPosition());
-            memberEntity.setPhoto(memberDto.getPhoto().get(0));
+            memberEntity.setPhoto(memberDto.getFirstName().toLowerCase());
 
             memberRepository.save(memberEntity);
             logger.info("ActionLog.updateMember.success with id {}", id);
@@ -147,8 +149,8 @@ public class MemberServiceImpl implements MemberService {
 
     private List<String> getMemberPhotos(String name, Map<String, String> photos) {
         List<String> memberPhotos = new ArrayList<>();
-        memberPhotos.add(0,"");
-        memberPhotos.add(1,"");
+        memberPhotos.add(0, "");
+        memberPhotos.add(1, "");
         for (Map.Entry<String, String> entry : photos.entrySet()) {
             if (entry.getKey().toLowerCase().startsWith(name.toLowerCase())) {
                 if (!entry.getKey().contains("hover")) {
