@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - logicalFilePath: db/changelog/1.0/1.1/changelog-1.1.4.yml
+  - changeSet:
+      id: update-members-image-path
+      author: Asif Hajiyev
+      changes:
+        - update:
+            tableName: members
+            where: first_name="Laman"
+            columns:
+              - column:
+                  name: photo
+                  value: "laman"

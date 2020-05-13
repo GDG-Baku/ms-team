@@ -6,6 +6,7 @@ import az.gdg.msteam.model.entity.MemberEntity;
 import java.util.List;
 
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
 
@@ -15,6 +16,7 @@ public interface MemberMapper {
 
     MemberEntity dtoToEntity(MemberDto memberDto);
 
+    @Mapping(target = "photo", ignore = true)
     MemberDto entityToDto(MemberEntity memberEntity);
 
     List<MemberDto> entityToDtoList(List<MemberEntity> memberEntities);

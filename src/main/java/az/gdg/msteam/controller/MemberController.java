@@ -1,7 +1,6 @@
 package az.gdg.msteam.controller;
 
 import az.gdg.msteam.model.dto.MemberDto;
-import az.gdg.msteam.model.dto.MemberResponseDto;
 import az.gdg.msteam.service.MemberService;
 import io.swagger.annotations.ApiOperation;
 
@@ -37,7 +36,7 @@ public class MemberController {
     @ApiOperation(value = "Getting all team members", response = MemberDto.class)
     @CrossOrigin(exposedHeaders = "Access-Control-Allow-Origin")
     @GetMapping
-    public ResponseEntity<List<MemberResponseDto>> getAllMembers() {
+    public ResponseEntity<List<MemberDto>> getAllMembers() {
         logger.debug("Get all team members start");
         return new ResponseEntity<>(memberService.getAllMembers(), HttpStatus.OK);
     }

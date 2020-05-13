@@ -1,5 +1,6 @@
 package az.gdg.msteam.service.impl;
 
+import az.gdg.msteam.client.DriveClient;
 import az.gdg.msteam.exception.MemberExistException;
 import az.gdg.msteam.exception.MemberNotFoundException;
 import az.gdg.msteam.exception.NoAccessException;
@@ -7,13 +8,12 @@ import az.gdg.msteam.exception.NotValidTokenException;
 import az.gdg.msteam.mapper.MemberMapper;
 import az.gdg.msteam.model.ResponseMessage;
 import az.gdg.msteam.model.dto.MemberDto;
-import az.gdg.msteam.model.dto.MemberResponseDto;
 import az.gdg.msteam.model.entity.MemberEntity;
 import az.gdg.msteam.repository.MemberRepository;
 import az.gdg.msteam.service.MemberService;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -29,20 +29,26 @@ public class MemberServiceImpl implements MemberService {
     private static final String NO_ACCESS_TO_REQUEST = "You don't have access for this request";
     private static final String ROLE_ADMIN = "ROLE_ADMIN";
     private final MemberRepository memberRepository;
+    private final DriveClient driveClient;
 
-    public MemberServiceImpl(MemberRepository memberRepository) {
+    public MemberServiceImpl(MemberRepository memberRepository, DriveClient driveClient) {
         this.memberRepository = memberRepository;
+        this.driveClient = driveClient;
     }
 
     @Override
-    public List<MemberResponseDto> getAllMembers() {
+    public List<MemberDto> getAllMembers() {
         logger.info("ActionLog.getAllMembers.start");
         List<MemberDto> members = MemberMapper.INSTANCE.entityToDtoList(memberRepository.findAll());
         if (members.isEmpty()) {
             throw new MemberNotFoundException("No member is available");
         }
+        Map<String, String> photos = driveClient.getImages();
+        for (MemberDto memberDto : members) {
+            memberDto.setPhoto(getMemberPhoto(memberDto.getFirstName(), photos));
+        }
         logger.info("ActionLog.getAllMembers.success");
-        return dtoToResponseDto(members);
+        return members;
     }
 
     private Authentication getAuthenticatedObject() {
@@ -138,26 +144,12 @@ public class MemberServiceImpl implements MemberService {
         }
     }
 
-    public List<MemberResponseDto> dtoToResponseDto(List<MemberDto> dtoList) {
-        List<MemberResponseDto> responseDtoList = new ArrayList<>();
-        for (MemberDto memberDto : dtoList) {
-            MemberResponseDto responseDto = new MemberResponseDto();
-
-            responseDto.setFirstName(memberDto.getFirstName());
-            responseDto.setLastName(memberDto.getLastName());
-            responseDto.setEmail(memberDto.getEmail());
-            responseDto.setGithub(memberDto.getGithub());
-            responseDto.setLinkedin(memberDto.getLinkedin());
-            responseDto.setPosition(memberDto.getPosition());
-            responseDto.setPhoto(getPhotoByUrl(memberDto.getPhoto()));
-
-            responseDtoList.add(responseDto);
+    private String getMemberPhoto(String name, Map<String, String> photos) {
+        for (Map.Entry<String, String> entry : photos.entrySet()) {
+            if (entry.getKey().startsWith(name.toLowerCase())) {
+                return entry.getValue();
+            }
         }
-        return responseDtoList;
-    }
-
-    private byte[] getPhotoByUrl(String photoUrl) {
-        byte[] b = null;
-        return b;
+        return "";
     }
 }
