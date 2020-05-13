@@ -14,6 +14,7 @@ import org.mapstruct.factory.Mappers;
 public interface MemberMapper {
     MemberMapper INSTANCE = Mappers.getMapper(MemberMapper.class);
 
+    @Mapping(target = "photo", ignore = true)
     MemberEntity dtoToEntity(MemberDto memberDto);
 
     @Mapping(target = "photo", ignore = true)

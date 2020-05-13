@@ -12,6 +12,7 @@ import az.gdg.msteam.model.entity.MemberEntity;
 import az.gdg.msteam.repository.MemberRepository;
 import az.gdg.msteam.service.MemberService;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -45,7 +46,7 @@ public class MemberServiceImpl implements MemberService {
         }
         Map<String, String> photos = driveClient.getImages();
         for (MemberDto memberDto : members) {
-            memberDto.setPhoto(getMemberPhoto(memberDto.getFirstName(), photos));
+            memberDto.setPhoto(getMemberPhotos(memberDto.getFirstName(), photos));
         }
         logger.info("ActionLog.getAllMembers.success");
         return members;
@@ -120,7 +121,7 @@ public class MemberServiceImpl implements MemberService {
             memberEntity.setLinkedin(memberDto.getLinkedin());
             memberEntity.setGithub(memberDto.getGithub());
             memberEntity.setPosition(memberDto.getPosition());
-            memberEntity.setPhoto(memberDto.getPhoto());
+            memberEntity.setPhoto(memberDto.getPhoto().get(0));
 
             memberRepository.save(memberEntity);
             logger.info("ActionLog.updateMember.success with id {}", id);
@@ -144,12 +145,19 @@ public class MemberServiceImpl implements MemberService {
         }
     }
 
-    private String getMemberPhoto(String name, Map<String, String> photos) {
+    private List<String> getMemberPhotos(String name, Map<String, String> photos) {
+        List<String> memberPhotos = new ArrayList<>();
+        memberPhotos.add(0,"");
+        memberPhotos.add(1,"");
         for (Map.Entry<String, String> entry : photos.entrySet()) {
-            if (entry.getKey().startsWith(name.toLowerCase())) {
-                return entry.getValue();
+            if (entry.getKey().toLowerCase().startsWith(name.toLowerCase())) {
+                if (!entry.getKey().contains("hover")) {
+                    memberPhotos.set(0, entry.getValue());
+                } else {
+                    memberPhotos.set(1, entry.getValue());
+                }
             }
         }
-        return "";
+        return memberPhotos;
     }
 }
