@@ -116,15 +116,7 @@ public class MemberServiceImpl implements MemberService {
         if (role.equals(ROLE_ADMIN)) {
             MemberEntity memberEntity = memberRepository.findById(id)
                     .orElseThrow(() -> new MemberNotFoundException("Member doesn't exist with this id: " + id));
-
-            memberEntity.setFirstName(memberDto.getFirstName());
-            memberEntity.setLastName(memberDto.getLastName());
-            memberEntity.setEmail(memberDto.getEmail());
-            memberEntity.setLinkedin(memberDto.getLinkedin());
-            memberEntity.setGithub(memberDto.getGithub());
-            memberEntity.setPosition(memberDto.getPosition());
-            memberEntity.setPhoto(memberDto.getFirstName().toLowerCase());
-
+            memberMapperToUpdate(memberEntity, memberDto);
             memberRepository.save(memberEntity);
             logger.info("ActionLog.updateMember.success with id {}", id);
             message = "Member is updated";
@@ -161,5 +153,15 @@ public class MemberServiceImpl implements MemberService {
             }
         }
         return memberPhotos;
+    }
+
+    private void memberMapperToUpdate(MemberEntity memberEntity, MemberDto memberDto) {
+        memberEntity.setFirstName(memberDto.getFirstName());
+        memberEntity.setLastName(memberDto.getLastName());
+        memberEntity.setEmail(memberDto.getEmail());
+        memberEntity.setLinkedin(memberDto.getLinkedin());
+        memberEntity.setGithub(memberDto.getGithub());
+        memberEntity.setPosition(memberDto.getPosition());
+        memberEntity.setPhoto(memberDto.getFirstName().toLowerCase());
     }
 }
