@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.RequestHeader;
 
 import static az.gdg.msteam.model.client.auth.HttpHeader.X_AUTH_TOKEN;
 
-@FeignClient(value = "ms-auth-client", url = "https://gdg-ms-auth.herokuapp.com/")
+@FeignClient(value = "ms-auth-client", url = "${client.service.url.ms-auth}")
 public interface AuthenticationClient {
-    @PostMapping("/auth/validate")
+    @PostMapping
     UserInfo validateToken(@RequestHeader(X_AUTH_TOKEN) String token);
 }

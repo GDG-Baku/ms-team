@@ -5,8 +5,8 @@ import java.util.Map;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 
-@FeignClient(value = "ms-drive-client", url = "https://gdg-drive.herokuapp.com/get-links/")
+@FeignClient(value = "ms-storage-client", url = "${client.service.url.ms-storage}")
 public interface DriveClient {
-    @GetMapping("/map")
+    @GetMapping
     Map<String, String> getImages();
 }
