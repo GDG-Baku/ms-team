@@ -1,6 +1,6 @@
 package az.gdg.msteam.service.impl;
 
-import az.gdg.msteam.client.DriveClient;
+import az.gdg.msteam.client.StorageClient;
 import az.gdg.msteam.exception.MemberExistException;
 import az.gdg.msteam.exception.MemberNotFoundException;
 import az.gdg.msteam.exception.NoAccessException;
@@ -30,11 +30,11 @@ public class MemberServiceImpl implements MemberService {
     private static final String NO_ACCESS_TO_REQUEST = "You don't have access for this request";
     private static final String ROLE_ADMIN = "ROLE_ADMIN";
     private final MemberRepository memberRepository;
-    private final DriveClient driveClient;
+    private final StorageClient storageClient;
 
-    public MemberServiceImpl(MemberRepository memberRepository, DriveClient driveClient) {
+    public MemberServiceImpl(MemberRepository memberRepository, StorageClient storageClient) {
         this.memberRepository = memberRepository;
-        this.driveClient = driveClient;
+        this.storageClient = storageClient;
     }
 
     @Override
@@ -44,7 +44,7 @@ public class MemberServiceImpl implements MemberService {
         if (members.isEmpty()) {
             throw new MemberNotFoundException("No member is available");
         }
-        Map<String, String> photos = driveClient.getImages();
+        Map<String, String> photos = storageClient.getImages();
         for (MemberDto memberDto : members) {
             memberDto.setPhoto(getMemberPhotos(memberDto.getFirstName(), photos));
         }

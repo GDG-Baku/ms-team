@@ -55,7 +55,7 @@ public class MemberController {
     @DeleteMapping("internal/{id}")
     public ResponseEntity<String> deleteMember(@RequestHeader("X-Auth-Token") String token,
                                                @PathVariable("id") Long id) {
-        logger.debug("Get team member by id {} start", id);
+        logger.debug("Delete team member by id {} start", id);
         return new ResponseEntity<>(memberService.deleteMember(id), HttpStatus.OK);
     }
 
@@ -74,7 +74,7 @@ public class MemberController {
     @GetMapping("internal/{id}")
     public ResponseEntity<MemberDto> getMemberById(@RequestHeader("X-Auth-Token") String token,
                                                    @PathVariable Long id) {
-        logger.debug("Update team member by id {} start", id);
+        logger.debug("Get team member by id {} start", id);
         return new ResponseEntity<>(memberService.getMemberById(id), HttpStatus.OK);
     }
 
