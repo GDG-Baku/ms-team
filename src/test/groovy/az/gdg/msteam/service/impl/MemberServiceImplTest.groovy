@@ -1,6 +1,7 @@
 package az.gdg.msteam.service.impl
 
 import az.gdg.msteam.client.StorageClient
+import az.gdg.msteam.exception.InvalidTokenException
 import az.gdg.msteam.exception.MemberExistException
 import az.gdg.msteam.exception.MemberNotFoundException
 import az.gdg.msteam.exception.NoAccessException
@@ -195,6 +196,29 @@ class MemberServiceImplTest extends Specification {
         then:
             0 * memberRepository.save(memberEntity)
             thrown(MemberNotFoundException)
+    }
+
+
+    def "should get authenticated object"() {
+        given:
+            def memberAuthentication = new MemberAuthentication("", true)
+            SecurityContextHolder.getContext().setAuthentication(memberAuthentication)
+        when:
+            memberService.getAuthenticatedObject()
+        then:
+            notThrown(InvalidTokenException)
+    }
+
+    def "should throw InvalidTokenException when calling getAuthenticatedObject method"() {
+        given:
+            def memberAuthentication = null
+            SecurityContextHolder.getContext().setAuthentication(memberAuthentication)
+        when:
+            memberService.getAuthenticatedObject()
+        then:
+            0 * SecurityContextHolder.getContext().getAuthentication()
+            thrown(InvalidTokenException)
+
     }
 
     def cleanup() {
