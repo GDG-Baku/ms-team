@@ -218,7 +218,44 @@ class MemberServiceImplTest extends Specification {
         then:
             0 * SecurityContextHolder.getContext().getAuthentication()
             thrown(InvalidTokenException)
+    }
 
+    def "should return member with given id"() {
+        given:
+            def memberEntity = new MemberEntity()
+            def id = 1
+            memberEntity.setId(id)
+            def memberAuthentication = new MemberAuthentication("ROLE_ADMIN", true)
+            SecurityContextHolder.getContext().setAuthentication(memberAuthentication)
+            memberRepository.findById(id) >> Optional.of(memberEntity)
+        when:
+            memberService.getMemberById(id)
+        then:
+            notThrown(exception)
+        where:
+            exception << [NoAccessException, MemberNotFoundException]
+    }
+
+    def "should throw NoAccessException when getting member except than ROLE_ADMIN"() {
+        given:
+            def memberAuthentication = new MemberAuthentication("", true)
+            SecurityContextHolder.getContext().setAuthentication(memberAuthentication)
+        when:
+            memberService.getMemberById(1)
+        then:
+            thrown(NoAccessException)
+    }
+
+    def "should throw MemberNotFoundException when no member exist with given id"() {
+        given:
+            def id = 1
+            def memberAuthentication = new MemberAuthentication("ROLE_ADMIN", true)
+            SecurityContextHolder.getContext().setAuthentication(memberAuthentication)
+            memberRepository.findById(id) >> Optional.empty()
+        when:
+            memberService.getMemberById(id)
+        then:
+            thrown(MemberNotFoundException)
     }
 
     def cleanup() {
