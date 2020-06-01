@@ -1,10 +1,10 @@
 package az.gdg.msteam.service.impl;
 
 import az.gdg.msteam.client.StorageClient;
+import az.gdg.msteam.exception.InvalidTokenException;
 import az.gdg.msteam.exception.MemberExistException;
 import az.gdg.msteam.exception.MemberNotFoundException;
 import az.gdg.msteam.exception.NoAccessException;
-import az.gdg.msteam.exception.NotValidTokenException;
 import az.gdg.msteam.mapper.MemberMapper;
 import az.gdg.msteam.model.ResponseMessage;
 import az.gdg.msteam.model.dto.MemberDto;
@@ -54,7 +54,7 @@ public class MemberServiceImpl implements MemberService {
 
     private Authentication getAuthenticatedObject() {
         if (SecurityContextHolder.getContext().getAuthentication() == null) {
-            throw new NotValidTokenException("Token is not valid or it is expired");
+            throw new InvalidTokenException("Token is not valid or it is expired");
         }
         return SecurityContextHolder.getContext().getAuthentication();
     }
