@@ -145,7 +145,7 @@ public class MemberServiceImpl implements MemberService {
         memberPhotos.add(1, "");
         for (Map.Entry<String, String> entry : photos.entrySet()) {
             if (entry.getKey().toLowerCase().startsWith(name.toLowerCase())) {
-                if (!entry.getKey().contains("hover")) {
+                if (!entry.getKey().toLowerCase().contains("hover")) {
                     memberPhotos.set(0, entry.getValue());
                 } else {
                     memberPhotos.set(1, entry.getValue());

@@ -27,24 +27,20 @@ class MemberServiceImplTest extends Specification {
         memberService = new MemberServiceImpl(memberRepository, storageClient)
     }
 
-    /*def "should return all team members"() {
+    def "should return all team members"() {
         given:
-            def memberDto1 = new MemberDto()
-            Map<String, String> photos = new HashMap<>()
-            photos.put("asif", "asifImage")
-            photos.put("asifHover", "asifHoverImage")
-            List<String> memberPhotos = new ArrayList<>()
+            def memberDto = new MemberDto()
+            memberDto.setFirstName("")
             def mockMembers = []
-            mockMembers << MemberMapper.INSTANCE.dtoToEntity(memberDto1)
+            mockMembers << MemberMapper.INSTANCE.dtoToEntity(memberDto)
             memberRepository.findAll() >> mockMembers
-            memberService.getMemberPhotos("asif", _ as Map<String, String>) >> memberPhotos
-            memberDto1.setPhoto(memberPhotos)
+            storageClient.getImages() >> new HashMap<String, String>()
         when:
-            memberService.getAllMembers()
+            def members = memberService.getAllMembers()
         then:
-            memberRepository.findAll()
+            members.size() != 0
             notThrown(MemberNotFoundException)
-    }*/
+    }
 
     def "should throw MemberNotFoundException if there is no any member"() {
         given:
@@ -75,7 +71,7 @@ class MemberServiceImplTest extends Specification {
             exception << [NoAccessException, MemberExistException]
     }
 
-    def "should throw NoAccessException when requesting except than ROLE_ADMIN"() {
+    def "should throw NoAccessException when creating member except than ROLE_ADMIN"() {
         given:
             def memberDto = new MemberDto()
             def memberEntity = new MemberEntity()
@@ -126,7 +122,7 @@ class MemberServiceImplTest extends Specification {
             exception << [NoAccessException, MemberNotFoundException]
     }
 
-    def "should throw MemberExistException when deleting member except than ROLE_ADMIN"() {
+    def "should throw NoAccessException when deleting member except than ROLE_ADMIN"() {
         given:
             def memberEntity = new MemberEntity()
             def memberAuthentication = new MemberAuthentication("", true)
@@ -198,8 +194,7 @@ class MemberServiceImplTest extends Specification {
             thrown(MemberNotFoundException)
     }
 
-
-    def "should get authenticated object"() {
+    def "should return authenticated object"() {
         given:
             def memberAuthentication = new MemberAuthentication("", true)
             SecurityContextHolder.getContext().setAuthentication(memberAuthentication)
@@ -209,7 +204,7 @@ class MemberServiceImplTest extends Specification {
             notThrown(InvalidTokenException)
     }
 
-    def "should throw InvalidTokenException when calling getAuthenticatedObject method"() {
+    def "should throw InvalidTokenException when non-authenticated user requests"() {
         given:
             def memberAuthentication = null
             SecurityContextHolder.getContext().setAuthentication(memberAuthentication)
@@ -256,6 +251,30 @@ class MemberServiceImplTest extends Specification {
             memberService.getMemberById(id)
         then:
             thrown(MemberNotFoundException)
+    }
+
+    def "should get first photo of given member"() {
+        given:
+            def memberName = "asif"
+            def photos = new HashMap<String, String>()
+            photos.put("asif", "asifPhotoUrl")
+        when:
+            def memberPhotos = memberService.getMemberPhotos(memberName, photos)
+        then:
+            !memberPhotos.get(0).isEmpty()
+            memberPhotos.get(1).isEmpty()
+    }
+
+    def "should get hovered photo of given member"() {
+        given:
+            def memberName = "asif"
+            def photos = new HashMap<String, String>()
+            photos.put("asifHover", "asifPhotoUrl")
+        when:
+            def memberPhotos = memberService.getMemberPhotos(memberName, photos)
+        then:
+            memberPhotos.get(0).isEmpty()
+            !memberPhotos.get(1).isEmpty()
     }
 
     def cleanup() {
