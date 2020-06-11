@@ -15,11 +15,9 @@ import spock.lang.Specification
 
 class MemberServiceImplTest extends Specification {
 
-
     MemberServiceImpl memberService
     def memberRepository
     def storageClient
-
 
     void setup() {
         memberRepository = Mock(MemberRepository)

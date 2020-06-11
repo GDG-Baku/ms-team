@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/members")
+@CrossOrigin(exposedHeaders = "Access-Control-Allow-Origin")
 public class MemberController {
     private static final Logger logger = LoggerFactory.getLogger(MemberController.class);
     private final MemberService memberService;
@@ -34,7 +35,6 @@ public class MemberController {
     }
 
     @ApiOperation(value = "Getting all team members", response = MemberDto.class)
-    @CrossOrigin(exposedHeaders = "Access-Control-Allow-Origin")
     @GetMapping
     public ResponseEntity<List<MemberDto>> getAllMembers() {
         logger.debug("Get all team members start");
@@ -42,7 +42,6 @@ public class MemberController {
     }
 
     @ApiOperation(value = "Adding new team member")
-    @CrossOrigin(exposedHeaders = "Access-Control-Allow-Origin")
     @PostMapping("internal")
     public ResponseEntity<String> addMember(@RequestHeader("X-Auth-Token") String token,
                                             @RequestBody @Valid MemberDto memberDto) {
@@ -51,7 +50,6 @@ public class MemberController {
     }
 
     @ApiOperation(value = "Deleting team member")
-    @CrossOrigin(exposedHeaders = "Access-Control-Allow-Origin")
     @DeleteMapping("internal/{id}")
     public ResponseEntity<String> deleteMember(@RequestHeader("X-Auth-Token") String token,
                                                @PathVariable("id") Long id) {
@@ -60,7 +58,6 @@ public class MemberController {
     }
 
     @ApiOperation(value = "Updating team member")
-    @CrossOrigin(exposedHeaders = "Access-Control-Allow-Origin")
     @PutMapping("internal/{id}")
     public ResponseEntity<String> updateMember(@RequestHeader("X-Auth-Token") String token,
                                                @PathVariable Long id,
@@ -70,12 +67,10 @@ public class MemberController {
     }
 
     @ApiOperation(value = "Getting team member by id")
-    @CrossOrigin(exposedHeaders = "Access-Control-Allow-Origin")
     @GetMapping("internal/{id}")
     public ResponseEntity<MemberDto> getMemberById(@RequestHeader("X-Auth-Token") String token,
                                                    @PathVariable Long id) {
         logger.debug("Get team member by id {} start", id);
         return new ResponseEntity<>(memberService.getMemberById(id), HttpStatus.OK);
     }
-
 }
