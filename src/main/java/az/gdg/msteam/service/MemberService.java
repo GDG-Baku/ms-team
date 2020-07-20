@@ -18,4 +18,6 @@ public interface MemberService {
     String updateMember(Long id, MemberDto memberDto);
 
     MemberDto getMemberById(Long id);
+
+    List<String> getAllEmails();
 }

@@ -139,6 +139,20 @@ public class MemberServiceImpl implements MemberService {
         }
     }
 
+    @Override
+    public List<String> getAllEmails() {
+        List<String> emails = new ArrayList<>();
+        List<MemberEntity> members = memberRepository.findAll();
+        if (members.isEmpty()) {
+            throw new MemberNotFoundException("No member is available");
+        } else {
+            for (MemberEntity memberEntity : members) {
+                emails.add(memberEntity.getEmail());
+            }
+        }
+        return emails;
+    }
+
     private List<String> getMemberPhotos(String name, Map<String, String> photos) {
         List<String> memberPhotos = new ArrayList<>();
         memberPhotos.add(0, "");

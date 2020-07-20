@@ -73,4 +73,11 @@ public class MemberController {
         logger.debug("Get team member by id {} start", id);
         return new ResponseEntity<>(memberService.getMemberById(id), HttpStatus.OK);
     }
+
+    @ApiOperation(value = "Getting all team member's emails", response = String.class)
+    @GetMapping("/emails")
+    public ResponseEntity<List<String>> getAllEmails() {
+        logger.debug("Get all team member's emails start");
+        return new ResponseEntity<>(memberService.getAllEmails(), HttpStatus.OK);
+    }
 }
