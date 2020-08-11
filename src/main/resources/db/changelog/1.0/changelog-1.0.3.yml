@@ -1,0 +1,19 @@
+databaseChangeLog:
+  - logicalFilePath: db/changelog/1.0/changelog-1.0.3.yml
+  - changeSet:
+      id: update-member
+      author: Asif Hajiyev
+      changes:
+        - update:
+            tableName: members
+            where: first_name="Laman"
+            columns:
+              - column:
+                  name: email
+                  value: "lamanguliyeva@outlook.com"
+              - column:
+                  name: linkedin
+                  value: "http://www.linkedin.com/in/laman-guliyeva-0372901a4/"
+              - column:
+                  name: github
+                  value: "http://github.com/lmncode"
