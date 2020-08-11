@@ -19,6 +19,6 @@ public class AlarmController {
     @ApiOperation(value = "Method will be called by ms-alarm")
     @GetMapping
     public void alarm() {
-        logger.info("ActionLog.ms-article.start");
+        logger.info("ServiceLog.ms-article.start");
     }
 }

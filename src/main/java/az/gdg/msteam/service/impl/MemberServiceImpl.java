@@ -39,7 +39,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public List<MemberDto> getAllMembers() {
-        logger.info("ActionLog.getAllMembers.start");
+        logger.info("ServiceLog.getAllMembers.start");
         List<MemberDto> members = MemberMapper.INSTANCE.entityToDtoList(memberRepository.findAll());
         if (members.isEmpty()) {
             throw new MemberNotFoundException("No member is available");
@@ -48,7 +48,7 @@ public class MemberServiceImpl implements MemberService {
         for (MemberDto memberDto : members) {
             memberDto.setPhoto(getMemberPhotos(memberDto.getFirstName(), photos));
         }
-        logger.info("ActionLog.getAllMembers.success");
+        logger.info("ServiceLog.getAllMembers.success");
         return members;
     }
 
@@ -61,7 +61,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public String createMember(MemberDto memberDto) {
-        logger.info("ActionLog.createMember.start with email {}", memberDto.getEmail());
+        logger.info("ServiceLog.createMember.start with email {}", memberDto.getEmail());
         String role = (String) getAuthenticatedObject().getPrincipal();
         String message;
         if (role.equals(ROLE_ADMIN)) {
@@ -69,7 +69,7 @@ public class MemberServiceImpl implements MemberService {
                 MemberEntity memberEntity = MemberMapper.INSTANCE.dtoToEntity(memberDto);
                 memberEntity.setPhoto(memberDto.getFirstName().toLowerCase());
                 memberRepository.save(memberEntity);
-                logger.info("ActionLog.createMember.success");
+                logger.info("ServiceLog.createMember.success");
                 message = "Member is created";
             } else {
                 throw new MemberExistException("Member is exist with this email");
@@ -77,25 +77,25 @@ public class MemberServiceImpl implements MemberService {
         } else {
             throw new NoAccessException(NO_ACCESS_TO_REQUEST);
         }
-        logger.info("ActionLog.createMember.end");
+        logger.info("ServiceLog.createMember.end");
         return message;
     }
 
     @Override
     public Optional<MemberEntity> findByEmail(String email) {
-        logger.info("ActionLog.findByEmail.start with email {}", email);
+        logger.info("ServiceLog.findByEmail.start with email {}", email);
         return memberRepository.findByEmail(email);
     }
 
     @Override
     public String deleteMember(Long id) {
-        logger.info("ActionLog.deleteMember.start with id {}", id);
+        logger.info("ServiceLog.deleteMember.start with id {}", id);
         ResponseMessage response = new ResponseMessage();
         String role = (String) getAuthenticatedObject().getPrincipal();
         if (role.equals(ROLE_ADMIN)) {
             if (memberRepository.findById(id).isPresent()) {
                 memberRepository.deleteById(id);
-                logger.info("ActionLog.deleteMember.success with id {}", id);
+                logger.info("ServiceLog.deleteMember.success with id {}", id);
                 response.setMessage("Member deleted");
             } else {
                 response.setMessage("Id is not available");
@@ -104,13 +104,13 @@ public class MemberServiceImpl implements MemberService {
         } else {
             throw new NoAccessException(NO_ACCESS_TO_REQUEST);
         }
-        logger.info("ActionLog.deleteMember.end with id {}", id);
+        logger.info("ServiceLog.deleteMember.end with id {}", id);
         return response.getMessage();
     }
 
     @Override
     public String updateMember(Long id, MemberDto memberDto) {
-        logger.info("ActionLog.updateMember.start with id {}", id);
+        logger.info("ServiceLog.updateMember.start with id {}", id);
         String message = "";
         String role = (String) getAuthenticatedObject().getPrincipal();
         if (role.equals(ROLE_ADMIN)) {
@@ -118,18 +118,18 @@ public class MemberServiceImpl implements MemberService {
                     .orElseThrow(() -> new MemberNotFoundException("Member doesn't exist with this id: " + id));
             memberMapperToUpdate(memberEntity, memberDto);
             memberRepository.save(memberEntity);
-            logger.info("ActionLog.updateMember.success with id {}", id);
+            logger.info("ServiceLog.updateMember.success with id {}", id);
             message = "Member is updated";
         } else {
             throw new NoAccessException(NO_ACCESS_TO_REQUEST);
         }
-        logger.info("ActionLog.updateMember.end with id {}", id);
+        logger.info("ServiceLog.updateMember.end with id {}", id);
         return message;
     }
 
     @Override
     public MemberDto getMemberById(Long id) {
-        logger.info("ActionLog.getMemberById.start with id {}", id);
+        logger.info("ServiceLog.getMemberById.start with id {}", id);
         String role = (String) getAuthenticatedObject().getPrincipal();
         if (role.equals(ROLE_ADMIN)) {
             return MemberMapper.INSTANCE.entityToDto(memberRepository.findById(id)
