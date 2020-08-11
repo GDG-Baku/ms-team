@@ -44,9 +44,8 @@ public class MemberServiceImpl implements MemberService {
         if (members.isEmpty()) {
             throw new MemberNotFoundException("No member is available");
         }
-        Map<String, String> photos = storageClient.getImages();
         for (MemberDto memberDto : members) {
-            memberDto.setPhoto(getMemberPhotos(memberDto.getFirstName(), photos));
+            memberDto.setPhoto(getMemberPhotos(memberDto.getFirstName()));
         }
         logger.info("ServiceLog.getAllMembers.success");
         return members;
@@ -132,8 +131,10 @@ public class MemberServiceImpl implements MemberService {
         logger.info("ServiceLog.getMemberById.start with id {}", id);
         String role = (String) getAuthenticatedObject().getPrincipal();
         if (role.equals(ROLE_ADMIN)) {
-            return MemberMapper.INSTANCE.entityToDto(memberRepository.findById(id)
+            MemberDto memberDto = MemberMapper.INSTANCE.entityToDto(memberRepository.findById(id)
                     .orElseThrow(() -> new MemberNotFoundException("Member doesn't exist with this id: " + id)));
+            memberDto.setPhoto(getMemberPhotos(memberDto.getFirstName()));
+            return memberDto;
         } else {
             throw new NoAccessException(NO_ACCESS_TO_REQUEST);
         }
@@ -153,7 +154,8 @@ public class MemberServiceImpl implements MemberService {
         return emails;
     }
 
-    private List<String> getMemberPhotos(String name, Map<String, String> photos) {
+    private List<String> getMemberPhotos(String name) {
+        Map<String, String> photos = storageClient.getImages();
         List<String> memberPhotos = new ArrayList<>();
         memberPhotos.add(0, "");
         memberPhotos.add(1, "");

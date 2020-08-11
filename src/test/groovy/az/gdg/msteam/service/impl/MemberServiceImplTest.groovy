@@ -221,6 +221,7 @@ class MemberServiceImplTest extends Specification {
             def memberAuthentication = new MemberAuthentication("ROLE_ADMIN", true)
             SecurityContextHolder.getContext().setAuthentication(memberAuthentication)
             memberRepository.findById(id) >> Optional.of(memberEntity)
+            storageClient.getImages() >> new HashMap<String, String>()
         when:
             memberService.getMemberById(id)
         then:
@@ -256,8 +257,9 @@ class MemberServiceImplTest extends Specification {
             def memberName = "asif"
             def photos = new HashMap<String, String>()
             photos.put("asif", "asifPhotoUrl")
+            storageClient.getImages() >> photos
         when:
-            def memberPhotos = memberService.getMemberPhotos(memberName, photos)
+            def memberPhotos = memberService.getMemberPhotos(memberName)
         then:
             !memberPhotos.get(0).isEmpty()
             memberPhotos.get(1).isEmpty()
@@ -268,8 +270,9 @@ class MemberServiceImplTest extends Specification {
             def memberName = "asif"
             def photos = new HashMap<String, String>()
             photos.put("asifHover", "asifPhotoUrl")
+            storageClient.getImages() >> photos
         when:
-            def memberPhotos = memberService.getMemberPhotos(memberName, photos)
+            def memberPhotos = memberService.getMemberPhotos(memberName)
         then:
             memberPhotos.get(0).isEmpty()
             !memberPhotos.get(1).isEmpty()
